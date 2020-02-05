@@ -32,7 +32,7 @@ public class TodoRepositoryImpl implements TodoRepository {
 
     @Override
     public List<Todo> findByTaskDescriptionContains(String taskDescription) {
-        return todoList.stream().filter(todo -> todo.getTaskDescription().equalsIgnoreCase(taskDescription))
+        return todoList.stream().filter(todo -> todo.getTaskDescription().toLowerCase().contains(taskDescription))
                 .collect(Collectors.toList());
     }
 
@@ -50,24 +50,27 @@ public class TodoRepositoryImpl implements TodoRepository {
 
     @Override
     public List<Todo> findByDeadLineBetween(LocalDate start, LocalDate end) {
-        return todoList.stream().filter(todo -> todo.getDeadLine().equals(Period.between(start, end)))
-                .collect(Collectors.toList());
+
+        return todoList.stream().filter(todo -> todo.getDeadLine().isAfter(start) &&
+                todo.getDeadLine().isBefore(end)).collect(Collectors.toList());
+
     }
 
     @Override
     public List<Todo> findByAssigneeId(int personId) {
-        return todoList.stream().filter(todo -> todo.getAssignee().getPersonId() == personId)
+        return todoList.stream().filter(todo -> todo.getTodoId() != 0 && todo.getAssignee().getPersonId() == personId)
                 .collect(Collectors.toList());
     }
 
     @Override
     public List<Todo> findAllUnassignedTasks() {
-        return todoList.stream().filter(todo -> todo.getAssignee().equals(null))
+        return todoList.stream().filter(todo -> todo.getTodoId() != 0 && todo.getAssignee() == null)
                 .collect(Collectors.toList());
     }
 
     @Override
     public List<Todo> findAllAssignedTasks() {
+
         return todoList.stream().filter(todo -> todo.getAssignee() != null)
                 .collect(Collectors.toList());
     }
