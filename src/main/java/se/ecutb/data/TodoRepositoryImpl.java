@@ -1,5 +1,6 @@
 package se.ecutb.data;
 
+import org.springframework.stereotype.Component;
 import se.ecutb.model.Person;
 import se.ecutb.model.Todo;
 
@@ -9,7 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
-
+@Component
 public class TodoRepositoryImpl implements TodoRepository {
 
     private List<Todo> todoList = new ArrayList<>();
